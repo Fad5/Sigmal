@@ -37,7 +37,6 @@ def process_csv(name_file: str, mode='default'):
         filtered_data = []
         if mode == 'default':
             for row in reader:
-                if 'СТ-' in row[0]:
                     if row[2] and row[3] and row[4]:
                         filtered_data.append({
                             'Name': row[0],
