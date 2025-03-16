@@ -1,6 +1,6 @@
 import os
 from managmant_files_dirs.Hadler_file import JsonHandler
-from config import EDIT_ECO, name_file_sample
+from config import name_file_sample
 
 
 def get_files_edit(path_files: str) -> list:

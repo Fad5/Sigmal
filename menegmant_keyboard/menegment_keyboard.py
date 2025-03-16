@@ -1,7 +1,6 @@
 import keyboard
 import pyautogui
 
-from config import SAVE_DIR, EDIT_ECO
 from utils import timeout_step, correct_name_file_csv, paste
 
 

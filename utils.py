@@ -1,3 +1,5 @@
+import pprint
+
 import keyboard
 import pyautogui
 import time
@@ -6,13 +8,14 @@ import os
 import pyperclip
 import re
 
-from config import path_btn_pputest, path_btn_signal
+from config import path_btn_signal
+from managmant_files_dirs.Hadler_file import JsonHandler
 
 
 def correct_name_file_csv(name: str, press: str) -> str:
     """
     Функция для создания имени файла в который
-    входит названия образца и пригруз 
+    входит названия образца и пригруз
 
     Аргументы:
 
@@ -81,7 +84,7 @@ def create_dir() -> None:
     """
     Функция для создания корневых папок в которых будут храниться скриншоты кнопок
     """
-    for i in path_btn_pputest, path_btn_signal:
+    for i in path_btn_signal:
         os.makedirs(i, exist_ok=True)
 
 
@@ -157,3 +160,85 @@ def get_name_upload(filename):
     cargo = (filename[start + 1:end])
     name = (filename[:start])
     return name, cargo
+
+
+def get_full_data():
+    """
+    Читает данные из JSON-файлов sample_sizes.json и sample_time.json.
+
+    :return: Кортеж из двух списков samples_press и samples_time
+    """
+    samples_press = JsonHandler.read_json('sample_sizes.json')
+    samples_time = JsonHandler.read_json('sample_time.json')
+    return samples_press, samples_time
+
+def unique_names_samples(samples_time):
+    """
+    Извлекает уникальные названия образцов из списка samples_time.
+
+    :param samples_time: Список словарей с ключом 'Name'
+    :return: Список уникальных названий образцов
+    """
+    list_names = [i['Name'] for i in samples_time]
+    return list(set(list_names))
+
+def group_by_name(samples_time, list_names_unique):
+    """
+    Группирует данные по названиям образцов.
+
+    :param samples_time: Список данных о времени испытаний
+    :param list_names_unique: Список уникальных названий образцов
+    :return: Список словарей с объединенными данными по каждому уникальному образцу
+    """
+    full_data_load = []
+    for name in list_names_unique:
+        list_group_data = [
+            {"Press": item['Press'], "Under_load": item['Under_load']}
+            for item in samples_time if item['Name'] == name
+        ]
+        full_data_load.append({'Name': name, 'Width': list_group_data})
+    return full_data_load
+
+def map_press_to_load(samples_press, full_data_load):
+    """
+    Объединяет данные samples_press с full_data_load по полю 'Name'.
+
+    :param samples_press: Список характеристик образцов (размеры, вес)
+    :param full_data_load: Список данных по нагрузке для каждого образца
+    :return: Список словарей, содержащих полные данные об образцах
+    """
+    list_data = [
+        {
+            "Height": press['Height'],
+            "Length": press['Length'],
+            "Name": press['Name'],
+            "Weight": press['Weight'],
+            "Width": press['Width'],
+            "Under_load": load['Width']
+        }
+        for press in samples_press
+        for load in full_data_load
+        if press['Name'] == load['Name']
+    ]
+    return list_data
+
+def get_full_sample_data():
+    """
+    Собирает полные данные об образцах, объединяя информацию о размерах, весе и нагрузке.
+
+    :return: Список словарей с полной информацией об образцах
+    """
+    samples_press, samples_time = get_full_data()
+    list_names_unique = unique_names_samples(samples_time)
+    full_data_load = group_by_name(samples_time, list_names_unique)
+    result = map_press_to_load(samples_press, full_data_load)
+    JsonHandler.write_json('data', result)
+
+
+
+
+
+
+
+
+

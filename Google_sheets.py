@@ -44,8 +44,7 @@ def process_csv(name_file: str, mode='default'):
                             'Width': row[5],
                             'Length': row[10],
                             'Height': row[15],
-                            'Weight': row[16],
-                            'Press': row[17]
+                            'Weight': row[16]
                         })
         if mode == 'signal':
             for row in reader:

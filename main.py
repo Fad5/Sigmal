@@ -6,6 +6,7 @@ from config import LINK_TIME_SAMPLE, SAMPLE
 from managmant_files_dirs.Create_dir import logic_dir
 from managmant_files_dirs.Hadler_file import JsonHandler
 from signal_ import management_signal
+from utils import get_full_sample_data
 
 
 def path_save() -> tuple:
@@ -43,6 +44,7 @@ def main() -> None:
     # loading_path, save_path = path_save()
     loading_path = 'C:/Users/Fad/Desktop/Работа/1'
     save_path = 'F:/Протоколы'
+    get_full_sample_data()
     download_files()
     logic_dir(save_path=save_path, loading_path=loading_path)
     management_signal(save_path, loading_path)

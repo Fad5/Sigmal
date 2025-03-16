@@ -3,10 +3,9 @@ import os
 import pyautogui
 
 from managmant_files_dirs.Create_dir import get_all_files_if_exist
-from managmant_files_dirs.check_files import logic_check, get_files_edit
+from managmant_files_dirs.check_files import logic_check
 from menegmant_keyboard.menegment_keyboard import search_eco, save_file_csv
 from utils import wait_loading, correct_name_file_csv
-from config import path_btn_signal
 
 
 def first_point():

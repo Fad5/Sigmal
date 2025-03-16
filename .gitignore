@@ -1,0 +1,7 @@
+.idea
+managmant_files_dirs/__pycache__
+menegmant_keyboard/__pycache__
+/sample_sizes.csv
+/sample_sizes.json
+/sample_time.csv
+/sample_time.json

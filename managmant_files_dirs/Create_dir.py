@@ -1,4 +1,3 @@
-from config import EDIT_ECO
 from managmant_files_dirs import check_files
 import os
 
